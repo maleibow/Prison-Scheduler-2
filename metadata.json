@@ -1,0 +1,6 @@
+{
+  "name": "Prison Rehearsal Scheduler",
+  "description": "A simple offline-first web app for the band Prison to coordinate availability. Shared via URL state.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

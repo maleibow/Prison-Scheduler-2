@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    
+    function isValidAvailability(data) {
+      return data.keys().hasAll(['name', 'dates', 'uid', 'createdAt', 'updatedAt']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.dates is list && data.dates.size() <= 365 &&
+             data.uid is string &&
+             data.createdAt is timestamp &&
+             data.updatedAt is timestamp;
+    }
+    
+    match /availabilities/{docId} {
+      allow read: if true;
+      allow create: if isValidAvailability(incoming()) && 
+                    incoming().createdAt == request.time && 
+                    incoming().updatedAt == request.time;
+      allow update: if isValidAvailability(incoming()) &&
+                    incoming().diff(existing()).affectedKeys().hasOnly(['name', 'dates', 'updatedAt', 'uid', 'createdAt']) &&
+                    incoming().updatedAt == request.time;
+      allow delete: if true;
+    }
+  }
+}

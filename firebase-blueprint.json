@@ -1,0 +1,33 @@
+{
+  "entities": {
+    "Availability": {
+      "title": "Availability",
+      "description": "User's submitted availability dates",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "dates": {
+          "type": "array"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "timestamp"
+        },
+        "updatedAt": {
+          "type": "timestamp"
+        }
+      },
+      "required": ["name", "dates", "uid", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "availabilities/{uid}": {
+      "schema": "Availability",
+      "description": "Stores each band member's available dates"
+    }
+  }
+}
